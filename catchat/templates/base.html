@@ -15,14 +15,7 @@
         <i class="user secret icon"></i>
         Incognito Mode
     </a>
-    <a class="item" href="http://helloflask.com" target="_blank">
-        <i class="home icon"></i>
-        HelloFlask.com
-    </a>
-    <a class="item" href="https://github.com/greyli/catchat" target="_blank">
-        <i class="github icon"></i>
-        GitHub
-    </a>
+
     {% if current_user.is_authenticated %}
         <a class="item" href="{{ url_for('chat.profile') }}">
             <i class="setting icon"></i>
@@ -62,6 +55,16 @@
                         Sign in</a>
                 </div>
             {% endif %}
+        </div>
+
+        <div class="menu hide-on-mobile">
+            {% if current_user.is_authenticated %}
+                <div class="item">
+                    <a class="ui button orange basic" id="show-rooms" href="{{ url_for('room.get_rooms') }}">Rooms</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="menu hide-on-mobile">
             <a class="item" id="toggle-sidebar">
                 <i class="sidebar icon"></i>
             </a>

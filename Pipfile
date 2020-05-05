@@ -1,23 +1,13 @@
 [[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
 name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
 
 [dev-packages]
-mock = "*"
-watchdog = "*"
-faker = "*"
 
 [packages]
-Flask-SocketIO = "*"
-Flask = "*"
-python-dotenv = "*"
-flask-login = "*"
-Flask-WTF = "*"
-Flask-Moment = "*"
-Flask-OAuthlib = "*"
-eventlet = "*"
-bleach = "*"
-Markdown = "*"
-Pygments = "*"
-Flask-SQLAlchemy = "*"
+flask = "*"
+werkzeug = "==0.16.1"
+
+[requires]
+python_version = "3.6"

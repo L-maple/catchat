@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li <withlihui@gmail.com>
-    :license: MIT, see LICENSE for more details.
-"""
 from flask import render_template, redirect, url_for, request, Blueprint, current_app, abort
 from flask_login import current_user, login_required
 from flask_socketio import emit
 
 from catchat.extensions import socketio, db
 from catchat.forms import ProfileForm
-from catchat.models import Message, User
+from catchat.models import Message, User, Room
 from catchat.utils import to_html, flash_errors
 
 chat_bp = Blueprint('chat', __name__)
@@ -70,7 +64,7 @@ def disconnect():
 @chat_bp.route('/')
 def home():
     amount = current_app.config['CATCHAT_MESSAGE_PER_PAGE']
-    messages = Message.query.order_by(Message.timestamp.asc())[-amount:]
+    messages = Message.query.filter_by(room_id=1).order_by(Message.timestamp.asc())[-amount:]
     user_amount = User.query.count()
     return render_template('chat/home.html', messages=messages, user_amount=user_amount)
 

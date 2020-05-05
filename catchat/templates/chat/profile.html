@@ -16,16 +16,16 @@
                   action="{{ url_for('chat.profile') }}">
                 <div class="field eight wide">
                     <label>Nickname</label>
-                    <input name="nickname" placeholder="Nickname" type="text" value="{{ current_user.nickname }}">
+                    <input name="nickname" type="text" value="{{ current_user.nickname }}">
                 </div>
                 <div class="field">
                     <label>GitHub</label>
-                    <input name="github" placeholder="https://github.com/greyli" type="text"
+                    <input name="github" type="text"
                            value="{{ current_user.github or '' }}">
                 </div>
                 <div class="field">
                     <label>Website</label>
-                    <input name="website" placeholder="http://greyli.com" type="text"
+                    <input name="website" type="text"
                            value="{{ current_user.website or '' }}">
                 </div>
                 <div class="field">

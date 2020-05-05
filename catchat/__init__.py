@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li <withlihui@gmail.com>
-    :license: MIT, see LICENSE for more details.
-"""
 import os
 
 import click
@@ -15,8 +9,9 @@ from catchat.blueprints.admin import admin_bp
 from catchat.blueprints.auth import auth_bp
 from catchat.blueprints.chat import chat_bp
 from catchat.blueprints.oauth import oauth_bp
+from catchat.blueprints.room import room_bp
 from catchat.extensions import db, login_manager, csrf, socketio, moment, oauth
-from catchat.models import User, Message
+from catchat.models import User, Message, Room, UserRoom
 from catchat.settings import config
 
 
@@ -49,6 +44,7 @@ def register_blueprints(app):
     app.register_blueprint(oauth_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(room_bp)
 
 
 def register_errors(app):
@@ -103,8 +99,10 @@ def register_commands(app):
         db.session.commit()
 
         click.echo('Generating users...')
-        for i in range(50):
-            user = User(nickname=fake.name(),
+        for i in range(2, 52):
+            user = User(
+                        id=i,
+                        nickname=fake.name(),
                         bio=fake.sentence(),
                         github=fake.url(),
                         website=fake.url(),
@@ -116,12 +114,26 @@ def register_commands(app):
             except IntegrityError:
                 db.session.rollback()
 
+        click.echo("creating a room containing these users.")
+        room = Room(id=1, name="unknown", cur_user_total=50)
+        db.session.add(room)
+        db.session.commit()
+
+        for i in range(2, 52):
+            user_room = UserRoom(
+                user_id=i,
+                room_id=1,
+            )
+            db.session.add(user_room)
+        db.session.commit()
+
         click.echo('Generating messages...')
         for i in range(message):
             message = Message(
                 author=User.query.get(random.randint(1, User.query.count())),
                 body=fake.sentence(),
                 timestamp=fake.date_time_between('-30d', '-2d'),
+                room_id=1
             )
             db.session.add(message)
 
