@@ -35,7 +35,7 @@
     </div>
 
     <div>
-        <div class="table table-hover" align="right" style="width: 50%; height: 100px">
+        <div class="table table-hover" align="right" style="width: 60%; height: 100px">
             <form method="post" action="{{ url_for('room.search_room') }}">
                 {{ searchform.csrf_token }}
                 {{ searchform.room_name }}
@@ -44,7 +44,7 @@
         </div>
         <br>
         <div class="circular message">
-            <table class="table table-bordered table-hover" style="width:50%">
+            <table class="table table-bordered table-hover" style="width:60%">
                 <tr><th colspan="3" class="text-warning"><h2> --- {{ username }}'s ChatRooms --- </h2></th></tr>
             <tr><th>Room Name</th><th>Current User Number</th><th>Total Users</th><th>Owner</th></tr>
             {% for room in rooms %}
