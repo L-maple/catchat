@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for, Blueprint, request, make_response
+from flask import render_template, flash, redirect, url_for, Blueprint, request, session
 from flask_login import login_user, logout_user, login_required, current_user
 
 from catchat.extensions import db
@@ -40,6 +40,9 @@ def login():
                     db.session.add(room)
                 db.session.commit()
 
+                # 登录时默认第一个room
+                session['room_id'] = 1
+
                 return redirect(url_for('chat.home'))
 
         flash('Either the email or password was incorrect.')
@@ -57,6 +60,10 @@ def logout():
         room = Room.query.get(user_room.room_id)
         room.cur_user_total -= 1
         db.session.commit()
+
+    # delete room_id in session
+    session['room_id'] = 1
+
     logout_user()
 
     return redirect(url_for('chat.home'))

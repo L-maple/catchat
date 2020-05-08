@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for, Blueprint, request, current_app
+from flask import render_template, flash, redirect, url_for, Blueprint, session, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy import and_
 from catchat.models import Room, User, UserRoom, Message
@@ -116,7 +116,11 @@ def enter_room(room_id):
         messages = Message.query.filter_by(room_id=room_id).order_by(Message.timestamp.asc())[-amount:]
         user_amount = User.query.count()
         room = Room.query.get(room_id)
+        # 设置当前的room_id
+        session['room_id'] = room_id
+
         return render_template('chat/home.html', messages=messages, user_amount=user_amount, room=room)
+
     return redirect(url_for('room.get_rooms'))
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for, request, Blueprint, current_app, abort
+from flask import render_template, redirect, url_for, request, Blueprint, current_app, abort, session, escape
 from flask_login import current_user, login_required
 from flask_socketio import emit
 
@@ -16,7 +16,7 @@ online_users = []
 @socketio.on('new message')
 def new_message(message_body):
     html_message = to_html(message_body)
-    message = Message(author=current_user._get_current_object(), body=html_message)
+    message = Message(author=current_user._get_current_object(), body=html_message, room_id=escape(session['room_id']))
     db.session.add(message)
     db.session.commit()
     emit('new message',
@@ -64,9 +64,12 @@ def disconnect():
 @chat_bp.route('/')
 def home():
     amount = current_app.config['CATCHAT_MESSAGE_PER_PAGE']
-    messages = Message.query.filter_by(room_id=1).order_by(Message.timestamp.asc())[-amount:]
+    room_id = 1
+    if session.get('room_id'):
+        room_id = escape(session['room_id'])
+    messages = Message.query.filter_by(room_id=room_id).order_by(Message.timestamp.asc())[-amount:]
     user_amount = User.query.count()
-    room = Room.query.get(1)
+    room = Room.query.get(room_id)
     return render_template('chat/home.html', messages=messages, user_amount=user_amount, room=room)
 
 

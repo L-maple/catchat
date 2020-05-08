@@ -46,7 +46,8 @@
                     <td align="center">{{ room["user_total"] }}</td>
                     <td align="center">{{ room["owner"] }}</td>
                     <td align="center">
-                        <form action="post" href="{{ url_for('room.enter_room', room_id=room["room_id"]) }}">
+                        <form method="post" action="{{ url_for('room.enter_room', room_id=room["room_id"]) }}">
+                            {{ enter_form.csrf_token }}
                             {{ enter_form.submit }}
                         </form>
                     </td>
