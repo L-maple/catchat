@@ -4,8 +4,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy import and_
 from catchat.models import Room, User, UserRoom, Message
 from catchat.extensions import db
-from catchat.forms import SearchRoomForm, DeleteRoomForm, CreateRoomForm, EnterRoomForm
-
+from catchat.forms import SearchRoomForm, DeleteRoomForm, CreateRoomForm, EnterRoomForm, DisplayMemberForm
 
 room_bp = Blueprint('room', __name__)
 
@@ -46,6 +45,10 @@ def delete_room(room_id):
         flash("You aren't the owner of this room!")
         return redirect(url_for('room.get_rooms'))
 
+    messages = Message.query.filter(Message.room_id == room_id).all()
+    for message in messages:
+        db.session.delete(message)
+
     db.session.delete(room)
 
     user_rooms = UserRoom.query.filter(UserRoom.room_id == room_id).all()
@@ -67,7 +70,7 @@ def get_rooms():
         room = Room.query.filter(user_room.room_id == Room.id).first()
         user = User.query.get(room.owner)
         data = {
-            'room_id':   room.id,
+            'room_id': room.id,
             'room_name': room.name,
             'user_total': room.user_total,
             'cur_user_total': room.cur_user_total,
@@ -80,9 +83,14 @@ def get_rooms():
     delete_form = DeleteRoomForm()
     create_form = CreateRoomForm()
     enter_form = EnterRoomForm()
+    display_form = DisplayMemberForm()
     return render_template(
         'room/room.html', username=username, rooms=rooms,
-        searchform=search_form, deleteform=delete_form, createform=create_form, enter_form=enter_form)
+        searchform=search_form,
+        deleteform=delete_form,
+        createform=create_form,
+        enter_form=enter_form,
+        display_form=display_form)
 
 
 @room_bp.route('/search_room', methods=['POST'])
@@ -137,3 +145,15 @@ def add_member(user_id, room_id):
 @room_bp.route('/delete_member/<int:user_id>/<int:room_id>', methods=['POST'])
 def delete_member(user_id, room_id):
     pass
+
+
+@room_bp.route('/display_member/<int:room_id>', methods=['GET'])
+def display_member(room_id):
+    user_rooms = UserRoom.query.filter(UserRoom.room_id == room_id).all()
+    users = []
+    for user_room in user_rooms:
+        user = User.query.get(user_room.user_id)
+        users.append(user)
+
+    room = Room.query.get(room_id)
+    return render_template('room/member.html', users=users, room=room)

@@ -35,7 +35,7 @@
     </div>
 
     <div>
-        <div class="table table-hover" align="center" style="width: 50%; height: 100px">
+        <div class="table table-hover" align="right" style="width: 50%; height: 100px">
             <form method="post" action="{{ url_for('room.search_room') }}">
                 {{ searchform.csrf_token }}
                 {{ searchform.room_name }}
@@ -62,6 +62,12 @@
                         <form method="post" action="{{ url_for('room.enter_room', room_id=room["room_id"]) }}">
                             {{ enter_form.csrf_token }}
                             {{ enter_form.submit }}
+                        </form>
+                    </td>
+                    <td align="center">
+                        <form method="get" action="{{ url_for('room.display_member', room_id=room["room_id"]) }}">
+                            {{ display_form.csrf_token }}
+                            {{ display_form.submit }}
                         </form>
                     </td>
                 </tr>

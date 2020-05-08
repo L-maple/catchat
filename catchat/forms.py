@@ -43,3 +43,7 @@ class DeleteRoomForm(FlaskForm):
 
 class EnterRoomForm(FlaskForm):
     submit = SubmitField('Enter')
+
+
+class DisplayMemberForm(FlaskForm):
+    submit = SubmitField('Display')
