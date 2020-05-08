@@ -24,3 +24,22 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6), EqualTo('password2')])
     password2 = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class SearchRoomForm(FlaskForm):
+    room_name = StringField('RoomName', validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField('SearchRoom', render_kw={'class': 'btn btn-default'})
+
+
+class CreateRoomForm(FlaskForm):
+    room_name = StringField('RoomName', validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField('Create')
+
+
+class DeleteRoomForm(FlaskForm):
+    room_name = StringField('RoomName', validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField('Delete')
+
+
+class EnterRoomForm(FlaskForm):
+    submit = SubmitField('Enter')

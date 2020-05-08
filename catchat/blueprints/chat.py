@@ -66,7 +66,8 @@ def home():
     amount = current_app.config['CATCHAT_MESSAGE_PER_PAGE']
     messages = Message.query.filter_by(room_id=1).order_by(Message.timestamp.asc())[-amount:]
     user_amount = User.query.count()
-    return render_template('chat/home.html', messages=messages, user_amount=user_amount)
+    room = Room.query.get(1)
+    return render_template('chat/home.html', messages=messages, user_amount=user_amount, room=room)
 
 
 @chat_bp.route('/anonymous')

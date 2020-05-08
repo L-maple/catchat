@@ -68,6 +68,7 @@ class Room(db.Model):
     name = db.Column(db.String(255))
     user_total = db.Column(db.Integer)
     cur_user_total = db.Column(db.Integer)
+    owner = db.Column(db.Integer)
 
 
 class UserRoom(db.Model):

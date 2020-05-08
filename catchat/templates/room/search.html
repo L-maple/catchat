@@ -35,17 +35,9 @@
     </div>
 
     <div>
-        <div class="table table-hover" align="center" style="width: 50%; height: 100px">
-            <form method="post" action="{{ url_for('room.search_room') }}">
-                {{ searchform.csrf_token }}
-                {{ searchform.room_name }}
-                {{ searchform.submit }}
-            </form>
-        </div>
-        <br>
+        <h3>搜索结果：</h3>
         <div class="circular message">
             <table class="table table-bordered table-hover" style="width:50%">
-                <tr><th colspan="3" class="text-warning"><h2> --- {{ username }}'s ChatRooms --- </h2></th></tr>
             <tr><th>Room Name</th><th>Current User Number</th><th>Total Users</th><th>Owner</th></tr>
             {% for room in rooms %}
                 <tr>
@@ -53,29 +45,14 @@
                     <td align="center">{{ room["cur_user_total"] }}</td>
                     <td align="center">{{ room["user_total"] }}</td>
                     <td align="center">{{ room["owner"] }}</td>
-                    <td align="center"><form method="post" action="{{ url_for('room.delete_room', room_id=room['room_id']) }}">
-                        {{ deleteform.csrf_token }}
-                        {{ deleteform.submit }}
-                        </form>
-                    </td>
                     <td align="center">
-                        <form method="post" action="{{ url_for('room.enter_room', room_id=room["room_id"]) }}">
-                            {{ enter_form.csrf_token }}
+                        <form action="post" href="{{ url_for('room.enter_room', room_id=room["room_id"]) }}">
                             {{ enter_form.submit }}
                         </form>
                     </td>
                 </tr>
             {% endfor %}
                 <tr><td colspan="4">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</td></tr>
-                <tr>
-                    <form method="post" action="{{ url_for('room.create_room') }}">
-
-                        <td><p>New Room Name: </p></td>
-                        {{ createform.csrf_token }}
-                        <td>{{ createform.room_name }}</td>
-                        <td>{{ createform.submit }}</td>
-                    </form>
-                </tr>
             </table>
         </div>
     </div>

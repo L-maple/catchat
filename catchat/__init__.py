@@ -115,16 +115,16 @@ def register_commands(app):
                 db.session.rollback()
 
         click.echo("creating a room containing these users.")
-        room = Room(id=1, name="unknown", cur_user_total=50)
-        db.session.add(room)
-        db.session.commit()
-
+        room = Room(id=1, name="Family - All", cur_user_total=0, user_total=0, owner=admin.id)
         for i in range(2, 52):
             user_room = UserRoom(
                 user_id=i,
                 room_id=1,
             )
             db.session.add(user_room)
+            room.user_total += 1
+        db.session.add(room)
+
         db.session.commit()
 
         click.echo('Generating messages...')
